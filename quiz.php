@@ -56,14 +56,14 @@
         <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
         <input type="submit" id="send" value="送信">
         <script>
-            let submitButton = document.getElementById('send');
-            submitButton.addEventListener('click', function() {
-        if (document.answer_box.choice.value == "") {
-            alert("選択してください");
-        } else {
-            document.answer_box.submit();
-        }
-    })
+          let submitButton = document.getElementById('send');
+          submitButton.addEventListener('click', function() {
+            if (document.answer_box.choice.value == "") {
+              alert("選択してください");
+            } else {
+              document.answer_box.submit();
+            }
+          })
         </script>
     </form>
 </body>
