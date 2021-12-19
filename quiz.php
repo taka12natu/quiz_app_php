@@ -24,7 +24,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="text/javascript" src="script.js"></script>
     <title>Quiz</title>
 </head>
 <body>
@@ -41,10 +40,10 @@
         $choice->bind_result($choice_id, $question_id, $c_text, $correct_flg);
     ?>
    
-    <form method="POST" action="check.php">
+    <form method="POST" action="check.php" name="answer_box" onsubmit="return false">
         <ul>
         <?php while($choice->fetch()): ?>
-            <li><input type="radio" name="choice" value='<?php echo $choice_id; ?>'><?php echo $c_text; ?></li>
+            <li><input type="radio" name="choice" value=<?php echo $choice_id; ?>><?php echo $c_text; ?></li>
             <?php if($correct_flg == 1){
                 $answer_id = $choice_id; 
                 $answer_text = $c_text;
@@ -55,8 +54,17 @@
         <input type="hidden" name="answer" value=<?php echo $answer_id; ?>>
         <input type="hidden" name="id" value=<?php echo $id; ?>>
         <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
-        <input type="submit" id="button" name="submit">
+        <input type="submit" id="send" value="送信">
+        <script>
+            let submitButton = document.getElementById('send');
+            submitButton.addEventListener('click', function() {
+        if (document.answer_box.choice.value == "") {
+            alert("選択してください");
+        } else {
+            document.answer_box.submit();
+        }
+    })
+        </script>
     </form>
-
 </body>
 </html>

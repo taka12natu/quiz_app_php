@@ -42,7 +42,7 @@
     <form method="POST">
         <ul>
         <?php while($choice->fetch()): ?>
-            <li><input type="radio" name="choice" value='<?php echo $choice_id; ?>'><?php echo $c_text; ?></li>
+            <li><input type="radio" name="choice" value=<?php echo $choice_id; ?>><?php echo $c_text; ?></li>
             <?php if($correct_flg == 1){
                 $answer_text = $c_text;
             }
@@ -54,9 +54,9 @@
     <?php
         $c_id = filter_input(INPUT_POST, 'choice', FILTER_SANITIZE_NUMBER_INT);
         $a_id = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_NUMBER_INT);
+        $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
         if ($c_id == $a_id) {
              echo "正解";
-            $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
             $result_score ++;
             echo $result_score;
         }else{
@@ -70,7 +70,7 @@
             <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
         </form>
     <?php else: ?>
-        <form method="POST" action="result.php?data=<?php $result_score; ?>">
+        <form method="POST" action="result.php">
             <input type="submit" value="結果">
             <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
         </form>
