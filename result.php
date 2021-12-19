@@ -1,5 +1,3 @@
-<?php session_start(); ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +8,7 @@
 </head>
 <body>
     <h1>Result</h1>
-    <?php echo $_SESSION['result_score'];
-    unset($_SESSION['result_score']);
+    <?php echo $_POST['result_score'];
      ?>
 
      <a href="top.html">TOPに戻る</a>

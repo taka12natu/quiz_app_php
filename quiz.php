@@ -8,12 +8,14 @@
     $stmt->execute();
     $stmt->bind_result($id, $text);
     $stmt->fetch();
+?>
 
-    require('dbconnect.php');
-    $counts = $db->query('select count(*) as cnt from questions');
-    $count = $counts->fetch_assoc();
-
-    session_start();
+<?php 
+    if(isset($_POST['result_score'])){
+        $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
+    }else{
+        $result_score = 0;
+    }
 ?>
 
 <!DOCTYPE html>
@@ -22,6 +24,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="script.js"></script>
     <title>Quiz</title>
 </head>
 <body>
@@ -38,7 +41,7 @@
         $choice->bind_result($choice_id, $question_id, $c_text, $correct_flg);
     ?>
    
-    <form method="POST">
+    <form method="POST" action="check.php">
         <ul>
         <?php while($choice->fetch()): ?>
             <li><input type="radio" name="choice" value='<?php echo $choice_id; ?>'><?php echo $c_text; ?></li>
@@ -49,30 +52,11 @@
             ?>
         <?php endwhile; ?>
         </ul>
+        <input type="hidden" name="answer" value=<?php echo $answer_id; ?>>
+        <input type="hidden" name="id" value=<?php echo $id; ?>>
+        <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
         <input type="submit" id="button" name="submit">
     </form>
 
-    <?php
-    if($_POST['submit']){
-        $c_id = (int) $_POST['choice'];
-        if(!$_SESSION['result_score']) $_SESSION['result_score'] = 0;
-        if ($c_id == $answer_id) {
-             echo "正解";
-            $_SESSION['result_score'] ++;
-            echo $_SESSION['result_score'];
-        }else{
-            echo "不正解!<br> 正解は" . $answer_text;
-
-        };
-    }
-  ?>
-    <div>
-        <?php if($id < $count['cnt']): ?>
-            <a href="quiz.php?id=<?php echo $id = $id+1 ?>">次の問題へ</a>
-        <?php else: ?>
-            <a href="result.php">結果</a>
-        <?php endif ?>
-    </div>
-  
 </body>
 </html>
