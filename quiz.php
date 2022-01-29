@@ -1,3 +1,5 @@
+<!-- detail.phpのようにテーブル結合でコード簡略化する -->
+
 <!-- questionsテーブルから問題文を抽出 -->
 <?php
   require('dbconnect.php');
@@ -6,7 +8,7 @@
   $stmt->bind_param('i', $id);
   $stmt->execute();
   $stmt->bind_result($id, $text);
-  $stmt->fetch();
+  $result = $stmt->fetch();
 ?>
 
 <!-- 正解数をcheck.phpから受け取る -->

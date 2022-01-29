@@ -1,3 +1,5 @@
+<!-- detail.phpのようにテーブル結合でコード簡略化する -->
+
 <!-- questionsテーブルから問題文を抽出 -->
 <?php
   require('dbconnect.php');
