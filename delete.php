@@ -1,7 +1,7 @@
 <?php 
   require('dbconnect.php');
 
-  $stmt = $db->prepare('delete from questions where id=?');
+  $stmt = $db->prepare('DELETE questions,choices FROM questions LEFT JOIN choices ON questions.id = choices.questions_id WHERE questions.id=?');
   if(!$stmt){
     die($db->error);
   }

@@ -30,11 +30,12 @@
 			<p>選択肢</p>
 			<div>
 				<?php foreach ($rows as $row): ?>
-					<textarea name="c_texts[]" cols="20" rows="2"><?php echo htmlspecialchars($row['c_text']); ?></textarea><br>
+					<textarea name="c_texts[]" cols="20" rows="2"><?php echo htmlspecialchars($row['c_text']); ?></textarea>
+					<input type="radio" name="check" value="<?php echo $row['c_id']?>"><br>
 					<input type="hidden" name="c_ids[]" value="<?php echo $row['c_id']; ?>">
 				<?php endforeach ?>
-			</div>			
-		<input type="hidden" name="id" value="<?php echo $id; ?>">
+			</div>
+			<input type="hidden" name="id" value="<?php echo $id; ?>">
 			<button type="submit">更新</button>
 		</form>
 		<a href="detail.php?id=<?php echo $id ?>">戻る</a>

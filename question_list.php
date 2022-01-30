@@ -16,11 +16,11 @@
 </head>
 <body>
     <?php while ($question = $questions->fetch_assoc()): ?>
-    	<p><a href="detail.php?id=<?php echo $question['id']; ?>"><?php echo $question['id'] . htmlspecialchars($question['text']);?></a></p>
+    	<p><a href="detail.php?id=<?php echo $question['id']; ?>"><?php echo htmlspecialchars($question['text']);?></a></p>
     <?php endwhile; ?>
 
     <div>
-        <a href="">追加</a>
+        <a href="create.php">追加</a>
     </div>
 </body>
 </html>
