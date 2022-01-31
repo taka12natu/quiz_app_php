@@ -21,6 +21,7 @@
 
     <div>
         <a href="create.php">追加</a>
+        <a href="top.html">戻る</a>
     </div>
 </body>
 </html>

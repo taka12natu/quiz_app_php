@@ -1,14 +1,18 @@
-<!-- detail.phpのようにテーブル結合でコード簡略化する -->
-
-<!-- questionsテーブルから問題文を抽出 -->
 <?php
   require('dbconnect.php');
-  $stmt = $db->prepare('select * from questions where id=?');
+
+  // questionsテーブルとchoicesテーブルを結合
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  if(!$stmt){
+    die($db->error);
+	}
   $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
   $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $stmt->bind_result($id, $text);
-  $result = $stmt->fetch();
+  $stmt->execute(); 
+
+  // 抽出したデータを$rowsに格納
+  $result = $stmt->get_result();
+  $rows = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!-- 正解数をcheck.phpから受け取る -->
@@ -36,33 +40,24 @@
   <main>
   <!-- 問題文 -->
   <div class="question_box">
-    <p><?php echo $text; ?></p>
+    <p><?php echo $rows[0]['q_text']; ?></p>
   </div>
-  <!-- choicesテーブルから問題の選択肢を抽出 -->
-  <?php 
-    require('dbconnect.php');
-    $choice = $db->prepare('select * from choices where questions_id=?');
-    $question_id = $id;
-    $choice->bind_param('i', $question_id);
-    $choice->execute();
-    $choice->bind_result($choice_id, $question_id, $c_text, $correct_flg);
-  ?>
   <!-- 選択肢 -->
   <form method="POST" action="check.php" name="answer_box" onsubmit="return false" class="answer_box">
     <ul class="choice_box">
-      <?php while($choice->fetch()): ?>
-        <li><input type="radio" name="choice" value=<?php echo $choice_id; ?>><?php echo $c_text; ?></li>
+      <?php foreach($rows as $row): ?>
+        <li><input type="radio" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
         <!-- 正解の選択肢のidとテキストを変数に格納 -->
-        <?php if($correct_flg == 1){
-          $answer_id = $choice_id; 
-          $answer_text = $c_text;
+        <?php if($row['correct_flg'] == 1){
+          $answer_id = $row['c_id']; 
+          $answer_text = $row['c_text'];
         }
         ?>
-      <?php endwhile; ?>
+      <?php endforeach; ?>
     </ul>
     <!-- 正解の選択肢のid,問題のid,正解数をcheck.phpに渡す -->
     <input type="hidden" name="answer" value=<?php echo $answer_id; ?>>
-    <input type="hidden" name="id" value=<?php echo $id; ?>>
+    <input type="hidden" name="id" value=<?php echo $rows[0]['q_id']; ?>>
     <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
     <input type="submit" id="send" class="button" value="送信">
     <!-- 未選択時に送信を行わずメッセージ表示 -->

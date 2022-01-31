@@ -1,14 +1,18 @@
-<!-- detail.phpのようにテーブル結合でコード簡略化する -->
-
-<!-- questionsテーブルから問題文を抽出 -->
 <?php
   require('dbconnect.php');
-  $stmt = $db->prepare('select * from questions where id=?');
+
+  // questionsテーブルとchoicesテーブルを結合
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  if(!$stmt){
+    die($db->error);
+	}
   $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
   $stmt->bind_param('i', $id);
-  $stmt->execute();
-  $stmt->bind_result($id, $text);
-  $stmt->fetch();
+  $stmt->execute(); 
+
+  // 抽出したデータを$rowsに格納
+  $result = $stmt->get_result();
+  $rows = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -26,26 +30,17 @@
   </header>
   <main>
     <div class="question_box">
-      <p><?php echo $text; ?></p>
-    </div>
-    <?php 
-      require('dbconnect.php');
-      $choice = $db->prepare('select * from choices where questions_id=?');
-      $question_id = $id;
-      $choice->bind_param('i', $question_id);
-      $choice->execute();
-      $choice->bind_result($choice_id, $question_id, $c_text, $correct_flg);
-    ?>
-    
+      <p><?php echo $rows[0]['q_text']; ?></p>
+    </div>    
     <form method="POST" class="answer_box">
       <ul class="choice_box">
-        <?php while($choice->fetch()): ?>
-          <li><input type="radio" name="choice" value=<?php echo $choice_id; ?>><?php echo $c_text; ?></li>
-          <?php if($correct_flg == 1){
-              $answer_text = $c_text;
+        <?php foreach($rows as $row): ?>
+          <li><input type="radio" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
+          <?php if($row['correct_flg'] == 1){
+              $answer_text = $row['c_text'];
           }
           ?>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
       </ul>
     </form>
     <div class="judge_text">
@@ -62,15 +57,27 @@
         };
       ?>
     </div>
-    <!-- 問題数をカウント -->
-    <?php
-    require('dbconnect.php');
-    $counts = $db->query('select count(*) as cnt from questions');
-    $count = $counts->fetch_assoc();
+
+    <!-- 次の問題のidを取得して$next_idに格納 -->
+    <?php 
+      $stmt = $db->prepare('select MIN(id) from questions where id > ?');
+      if(!$stmt){
+        die($db->error);
+      }
+      $stmt->bind_param('i', $id);
+      $result = $stmt->execute();
+      // 問題(レコード)が最後の場合、結果はnullになるので分岐処理
+      if(!$result){
+        die($db->error);
+      }elseif($result != null){
+        $stmt->bind_result($next_id);
+        $stmt->fetch();
+     }
     ?>
-    <!-- 現在が最終問題か次も問題があるかどうかで分岐 -->
-    <?php if($id < $count['cnt']): ?>
-      <form method="POST" action="quiz.php?id=<?php echo $id = $id+1; ?>">
+
+    <!-- 次の問題(レコード)の有無で表示ボタンを変える -->
+    <?php if($next_id): ?>
+      <form method="POST" action="quiz.php?id=<?php echo $next_id; ?>">
         <input type="submit" value="次の問題" class="button">
         <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
       </form>

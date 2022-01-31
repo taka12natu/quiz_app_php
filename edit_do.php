@@ -13,33 +13,33 @@
     die($db->error);
   }
   // 選択肢を更新
-  $stmt_2 = $db->prepare('update choices set text=? where id=?');
-  if(!$stmt_2){
+  $stmt = $db->prepare('update choices set text=? where id=?');
+  if(!$stmt){
     die($db->error);
   } 
   $c_texts = filter_input(INPUT_POST, 'c_texts', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
   $c_ids = filter_input(INPUT_POST, 'c_ids', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
   $c_array = array_combine($c_ids, $c_texts);
    foreach ($c_array as $c_id => $c_text){
-    $stmt_2->bind_param('si', $c_text, $c_id);
-    $success = $stmt_2->execute();
+    $stmt->bind_param('si', $c_text, $c_id);
+    $success = $stmt->execute();
     if(!$success){
       die($db->error);
     }
   }
   // 元の正解フラグをfalseにする
-  $stmt_3 = $db->prepare('update choices set correct_flg=0 where questions_id=? and correct_flg=1');
-  if(!$stmt_3){
+  $stmt = $db->prepare('update choices set correct_flg=0 where questions_id=? and correct_flg=1');
+  if(!$stmt){
     die($db->error);
   } 
-  $stmt_3->bind_param('i', $id);
-  $success = $stmt_3->execute();
+  $stmt->bind_param('i', $q_id);
+  $success = $stmt->execute();
   if(!$success){
     die($db->error);
   }
   // 正解フラグを設定する
-  $stmt_4 = $db->prepare('update choices set correct_flg=1 where id=?');
-  if(!$stmt_4){
+  $stmt = $db->prepare('update choices set correct_flg=1 where id=?');
+  if(!$stmt){
     die($db->error);
   }
   // 正解フラグを設定するidを取得
@@ -47,12 +47,12 @@
   if(!$check){
     echo "正解が設定されていません"; // 更新前に処理したい
   }
-  $stmt_4->bind_param('i', $check);
-  $success = $stmt_4->execute();
+  $stmt->bind_param('i', $check);
+  $success = $stmt->execute();
   if(!$success){
     die($db->error);
   }
 ?>
 
 <p>更新しました</p>
-<div><a href="edit.php?id=<?php echo $id ?>">戻る</a></div>
+<div><a href="edit.php?id=<?php echo $q_id ?>">戻る</a></div>

@@ -15,8 +15,8 @@
   $q_id = $db->insert_id;
 
    // 選択肢を登録
-  $stmt_2 = $db->prepare('insert into choices(questions_id, text, correct_flg) values(?,?,?)');
-  if(!$stmt_2){
+  $stmt = $db->prepare('insert into choices(questions_id, text, correct_flg) values(?,?,?)');
+  if(!$stmt){
     die($db->error);
   } 
   $c_texts = filter_input(INPUT_POST, 'c_texts', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
@@ -28,8 +28,8 @@
     }else{
       $correct_flg = 0;
     }
-    $stmt_2->bind_param('isi',$q_id, $c_text, $correct_flg);
-    $success = $stmt_2->execute();
+    $stmt->bind_param('isi',$q_id, $c_text, $correct_flg);
+    $success = $stmt->execute();
     if(!$success){
       die($db->error);
     }
