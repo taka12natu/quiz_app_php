@@ -2,7 +2,7 @@
   require('dbconnect.php');
 
   // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
   if(!$stmt){
     die($db->error);
 	}
@@ -35,9 +35,10 @@
     <form method="POST" class="answer_box">
       <ul class="choice_box">
         <?php foreach($rows as $row): ?>
-          <li><input type="radio" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
+          <li><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
           <?php if($row['correct_flg'] == 1){
-              $answer_text = $row['c_text'];
+              $answer_text[] = $row['c_text'];
+              $answer_id[] = $row['c_id'];
           }
           ?>
         <?php endforeach; ?>
@@ -45,16 +46,18 @@
     </form>
     <div class="judge_text">
       <?php
-        $c_id = filter_input(INPUT_POST, 'choice', FILTER_SANITIZE_NUMBER_INT);
-        $a_id = filter_input(INPUT_POST, 'answer', FILTER_SANITIZE_NUMBER_INT);
+        $choice_id = filter_input(INPUT_POST, 'choice', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
         $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
-        if ($c_id == $a_id) {
+        if($choice_id == $answer_id){
           echo "<p class='correct'>正解</p>";
           $result_score ++;
         }else{
-          echo "<p class='incorrect'>不正解</p>正解は" . $answer_text;
-
-        };
+          echo "正解は";
+          foreach ($answer_text as $text){
+            echo "「" . htmlspecialchars($text) . "」";
+          } 
+        }
+        
       ?>
     </div>
 

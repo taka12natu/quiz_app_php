@@ -2,7 +2,7 @@
   require('dbconnect.php');
 
   // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
   if(!$stmt){
     die($db->error);
 	}
@@ -28,17 +28,26 @@
   <?php // 問題文の表示
     echo htmlspecialchars($rows[0]['q_text']); ?> 
 </p>
+<p>問題形式: 
+  <?php 
+    if ($rows[0]['answer_type'] == 'radio'){
+      echo "単一回答（ラジオボタン）";
+    }else if($rows[0]['answer_type'] == 'checkbox'){
+      echo "複数回答（チェックボックス）"; 
+    } 
+  ?>
+</p>
 <p>選択肢</p>
 <ul>  <!-- 選択肢の表示 -->
   <?php foreach ($rows as $row): ?>
     <li> <?php echo htmlspecialchars($row['c_text']); ?> </li>
   <?php endforeach ?>
 </ul>
-<p>
+<p>正解: 
   <?php // 正解の選択肢を表示
     foreach ($rows as $row){
       if($row['correct_flg'] == 1){
-        echo "正解：" . htmlspecialchars($row['c_text']);
+        echo "「" . htmlspecialchars($row['c_text']) . "」";
       }
     }    
   ?>

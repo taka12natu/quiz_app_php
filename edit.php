@@ -2,7 +2,7 @@
   require('dbconnect.php');
 
   // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
   if(!$stmt){
     die($db->error);
 	}
@@ -31,7 +31,7 @@
 			<div>
 				<?php foreach ($rows as $row): ?>
 					<textarea name="c_texts[]" cols="20" rows="2"><?php echo htmlspecialchars($row['c_text']); ?></textarea>
-					<input type="radio" name="check" value="<?php echo $row['c_id']?>"><br>
+					<input type="<?php echo $row['answer_type']?>" name="check[]" value="<?php echo $row['c_id']?>"><br>
 					<input type="hidden" name="c_ids[]" value="<?php echo $row['c_id']; ?>">
 				<?php endforeach ?>
 			</div>

@@ -2,7 +2,7 @@
   require('dbconnect.php');
 
   // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
+  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
   if(!$stmt){
     die($db->error);
 	}
@@ -46,7 +46,7 @@
   <form method="POST" action="check.php" name="answer_box" onsubmit="return false" class="answer_box">
     <ul class="choice_box">
       <?php foreach($rows as $row): ?>
-        <li><input type="radio" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
+        <li><input type="<?php echo $row['answer_type']?>" name="choice[]" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
         <!-- 正解の選択肢のidとテキストを変数に格納 -->
         <?php if($row['correct_flg'] == 1){
           $answer_id = $row['c_id']; 
@@ -55,8 +55,7 @@
         ?>
       <?php endforeach; ?>
     </ul>
-    <!-- 正解の選択肢のid,問題のid,正解数をcheck.phpに渡す -->
-    <input type="hidden" name="answer" value=<?php echo $answer_id; ?>>
+    <!-- 問題のid,正解数をcheck.phpに渡す -->
     <input type="hidden" name="id" value=<?php echo $rows[0]['q_id']; ?>>
     <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
     <input type="submit" id="send" class="button" value="送信">
@@ -64,12 +63,8 @@
     <script>
       let submitButton = document.getElementById('send');
       submitButton.addEventListener('click', function() {
-        if (document.answer_box.choice.value == "") {
-          alert("選択してください");
-        } else {
           document.answer_box.submit();
-        }
-      })
+        });
     </script>
   </form>
   </main>
