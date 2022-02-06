@@ -1,6 +1,13 @@
 <?php
-  require('dbconnect.php');
+    // 1問目の時に名前をセッションに入れて保持
+    session_start();
+    $first_question = filter_input(INPUT_POST, 'first_question', FILTER_SANITIZE_SPECIAL_CHARS);
+    if($first_question){
+      $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+      $_SESSION['name'] = $name;
+    }
 
+  require('dbconnect.php');
   // questionsテーブルとchoicesテーブルを結合
   $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
   if(!$stmt){

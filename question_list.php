@@ -5,7 +5,7 @@
 		die($db->error);
 	}
 ?>
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 <head>

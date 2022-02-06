@@ -1,3 +1,24 @@
+<?php 
+  session_start();
+
+  require('dbconnect.php');
+  $stmt = $db->prepare('insert into records(name, question_number, correct_answer, datetime) values(?,?,?,?)');
+  if(!$stmt){
+    die($db->error);
+  }
+  $name = $_SESSION['name'];
+  $question_number = "5";
+  $correct_answer = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
+  $datetime = new DateTime("now");
+  $datetime = $datetime->format('Y-m-d H:i:s');
+
+  $stmt->bind_param('siis', $name, $question_number, $correct_answer, $datetime);
+  $success = $stmt->execute();
+  if(!$success){
+    die($db->error);
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,8 +36,9 @@
 			<h2>Result</h2>
 			<div class="result_text">
 				<?php 
-				  $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
-					echo $result_score . "問 正解！"; ?>
+					echo $correct_answer . "問 正解！"; 
+          echo "正答率: " . number_format($correct_answer / $question_number *100, 1);
+        ?>
 			</div>
 			<div class="return">
 				<a href="top.html">TOPに戻る</a>
