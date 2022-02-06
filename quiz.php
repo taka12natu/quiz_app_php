@@ -45,19 +45,20 @@
   <!-- 選択肢 -->
   <form method="POST" action="check.php" name="answer_box" onsubmit="return false" class="answer_box">
     <ul class="choice_box">
-      <?php foreach($rows as $row): ?>
-        <li><input type="<?php echo $row['answer_type']?>" name="choice[]" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
-        <!-- 正解の選択肢のidとテキストを変数に格納 -->
-        <?php if($row['correct_flg'] == 1){
-          $answer_id = $row['c_id']; 
-          $answer_text = $row['c_text'];
-        }
-        ?>
-      <?php endforeach; ?>
+      <!-- 記述回答（テキストボックス） -->
+      <?php if($rows[0]['answer_type'] == 'textbox' ): ?>
+        <input type="text" name="input_text" id="textbox_text"></input>
+      <!-- 選択形式（ラジオボタン、チェックボックス） -->
+      <?php else: ?>
+        <?php foreach($rows as $row): ?>
+          <li><input type="<?php echo $row['answer_type']?>" name="choice[]" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </ul>
     <!-- 問題のid,正解数をcheck.phpに渡す -->
     <input type="hidden" name="id" value=<?php echo $rows[0]['q_id']; ?>>
     <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
+
     <input type="submit" id="send" class="button" value="送信">
     <!-- 未選択時に送信を行わずメッセージ表示 -->
     <script>

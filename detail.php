@@ -34,24 +34,33 @@
       echo "単一回答（ラジオボタン）";
     }else if($rows[0]['answer_type'] == 'checkbox'){
       echo "複数回答（チェックボックス）"; 
+    }else if($rows[0]['answer_type'] == 'textbox'){
+      echo "記述回答（テキストボックス）"; 
     } 
   ?>
 </p>
-<p>選択肢</p>
-<ul>  <!-- 選択肢の表示 -->
-  <?php foreach ($rows as $row): ?>
-    <li> <?php echo htmlspecialchars($row['c_text']); ?> </li>
-  <?php endforeach ?>
-</ul>
-<p>正解: 
-  <?php // 正解の選択肢を表示
-    foreach ($rows as $row){
-      if($row['correct_flg'] == 1){
-        echo "「" . htmlspecialchars($row['c_text']) . "」";
-      }
-    }    
-  ?>
-</p>
+<!-- テキストボックスだと選択肢がないので、表記を分岐処理 -->
+<?php if($rows[0]['answer_type'] == 'textbox'): ?>
+  <p>正解: 
+    <?php echo "「" . htmlspecialchars($rows[0]['c_text']) . "」"; ?>
+  </p>
+<?php else: ?>
+  <p>選択肢</p>
+  <ul>  <!-- 選択肢の表示 -->
+    <?php foreach ($rows as $row): ?>
+      <li> <?php echo htmlspecialchars($row['c_text']); ?> </li>
+    <?php endforeach ?>
+  </ul>
+  <p>正解: 
+    <?php // 正解の選択肢を表示
+      foreach ($rows as $row){
+        if($row['correct_flg'] == 1){
+          echo "「" . htmlspecialchars($row['c_text']) . "」";
+        }
+      }    
+    ?>
+  </p>
+<?php endif; ?>
 <div>
     <a href="edit.php?id=<?php echo $id ?>">編集</a>
     <a href="delete.php?id=<?php echo $id ?>">削除</a>

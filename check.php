@@ -34,21 +34,33 @@
     </div>    
     <form method="POST" class="answer_box">
       <ul class="choice_box">
-        <?php foreach($rows as $row): ?>
-          <li><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
-          <?php if($row['correct_flg'] == 1){
-              $answer_text[] = $row['c_text'];
-              $answer_id[] = $row['c_id'];
-          }
-          ?>
-        <?php endforeach; ?>
+        <?php if($rows[0]['answer_type'] != 'textbox' ): ?>
+          <?php foreach($rows as $row): ?>
+            <li><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
+            <!-- 選択肢の表示ついでに正解の選択肢を配列に格納 -->
+            <?php if($row['correct_flg'] == 1){
+                $answer_text[] = $row['c_text'];
+                $answer_id[] = $row['c_id'];
+            } ?>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </ul>
     </form>
     <div class="judge_text">
       <?php
         $choice_id = filter_input(INPUT_POST, 'choice', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
+        $input_text = filter_input(INPUT_POST, 'input_text', FILTER_SANITIZE_SPECIAL_CHARS);
         $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
-        if($choice_id == $answer_id){
+        if($input_text){
+          //　記述形式（テキストボックス）の正誤判定
+          if($rows[0]['c_text'] == $input_text){
+            echo "<p class='correct'>正解</p>";
+            $result_score ++;
+          }else{
+            echo "正解は「" . htmlspecialchars($rows[0]['c_text']) . "」";
+          }
+        // 選択形式（ラジオボタン、チェックボックス）の正誤判定
+        }elseif($choice_id == $answer_id){
           echo "<p class='correct'>正解</p>";
           $result_score ++;
         }else{
