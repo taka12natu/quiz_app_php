@@ -22,7 +22,7 @@
   $c_texts = filter_input(INPUT_POST, 'c_texts', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
   // 正解に選択した問題の番号(1~)が格納される
   $correct_flg_order = filter_input(INPUT_POST, 'check', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
-  $form = filter_input(INPUT_POST, 'form_select', FILTER_SANITIZE_SPECIAL_CHARS);
+  $answer_type = filter_input(INPUT_POST, 'form_select', FILTER_SANITIZE_SPECIAL_CHARS);
   // 選択肢の配列の整理（※未選択の問題形式の選択肢も空要素で入っているため）
   $c_texts = array_filter($c_texts); //空要素の削除
   $c_texts = array_values($c_texts); //インデックス番号の振り直し
