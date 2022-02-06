@@ -33,21 +33,30 @@
 			<div id="type">
 				<label><input type="radio" name="form_select" value="radio">単一回答</label>
 				<label><input type="radio" name="form_select" value="checkbox">複数回答</label>
+				<label><input type="radio" name="form_select" value="textbox">記述回答</label>
 			</div>
-			<p>選択肢</p>
+      <!-- チェックボックス -->
 			<div id="checkbox_form" class="default_view">
-			<?php for($i=1; $i<=4; $i++): ?>
+        <p>選択肢</p>
+			  <?php for($i=1; $i<=4; $i++): ?>
 					<textarea name="c_texts[]" class="checkbox_text" cols="20" rows="2"></textarea>
 					<input type="checkbox" name="check[]" class="checkbox_select" value="<?php echo $i ?>"><br>
 				<?php endfor ?>
 			</div>
+      <!-- ラジオボタン -->
 			<div id="radio_form" class="default_view">
-				<?php for($i=1; $i<=4; $i++): ?>
+        <p>選択肢</p>	
+        <?php for($i=1; $i<=4; $i++): ?>
 					<textarea name="c_texts[]" class="radio_text" cols="20" rows="2"></textarea>
 					<input type="radio" name="check[]" class="radio_select" value="<?php echo $i ?>"><br>
 				<?php endfor ?>
 			</div>
-			<button type="submit" id="create_do">更新</button>
+      <!-- テキストボックス -->
+			<div id="textbox_form" class="default_view">
+        <p>正解</p>
+        <input type="text" name="c_texts[]" id="textbox_text"></input>
+			</div>
+			<button type="submit" id="create_do">登録</button>
 		</form>
 		<a href="detail.php?id=<?php echo $id ?>">戻る</a>
 	</div>
