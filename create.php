@@ -1,18 +1,7 @@
 <?php
   require('dbconnect.php');
-
-  // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg from questions join choices on questions.id = choices.questions_id where questions.id=?');
-  if(!$stmt){
-    die($db->error);
-	}
-  $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-  $stmt->bind_param('i', $id);
-  $stmt->execute(); 
-
-  // 抽出したデータを$rowsに格納
-  $result = $stmt->get_result();
-  $rows = $result->fetch_all(MYSQLI_ASSOC);
+  // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
+  require('tableconnect.php');
 ?>
 
 <!DOCTYPE html>

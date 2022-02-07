@@ -1,7 +1,7 @@
 <?php 
   require('dbconnect.php');
   // 問題文を登録
-  $stmt = $db->prepare('insert into questions(text) values(?)');
+  $stmt = $db->prepare('INSERT INTO questions(text) VALUES(?)');
   if(!$stmt){
     die($db->error);
   }
@@ -15,7 +15,7 @@
   $q_id = $db->insert_id;
 
    // 選択肢を登録
-  $stmt = $db->prepare('insert into choices(questions_id, text, correct_flg, answer_type) values(?,?,?,?)');
+  $stmt = $db->prepare('INSERT INTO choices(questions_id, text, correct_flg, answer_type) VALUES(?,?,?,?)');
   if(!$stmt){
     die($db->error);
   } 

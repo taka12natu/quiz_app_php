@@ -1,7 +1,7 @@
 <?php 
   require('dbconnect.php');
   // 問題文を更新
-  $stmt = $db->prepare('update questions set text=? where id=?');
+  $stmt = $db->prepare('UPDATE questions SET text=? WHERE id=?');
   if(!$stmt){
     die($db->error);
   }
@@ -13,7 +13,7 @@
     die($db->error);
   }
   // 選択肢を更新
-  $stmt = $db->prepare('update choices set text=?, correct_flg=? where id=?');
+  $stmt = $db->prepare('UPDATE choices SET text=?, correct_flg=? WHERE id=?');
   if(!$stmt){
     die($db->error);
   } 

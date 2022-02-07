@@ -1,6 +1,6 @@
 <?php
   require('dbconnect.php');
-  $questions = $db->query('select * from questions');
+  $questions = $db->query('SELECT * FROM questions');
   if(!$questions){
 		die($db->error);
 	}

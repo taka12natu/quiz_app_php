@@ -2,12 +2,12 @@
   session_start();
 
   require('dbconnect.php');
-  $stmt = $db->prepare('insert into records(name, question_number, correct_answer, datetime) values(?,?,?,?)');
+  $stmt = $db->prepare('INSERT INTO records(name, question_number, correct_answer, datetime) VALUES(?,?,?,?)');
   if(!$stmt){
     die($db->error);
   }
   $name = $_SESSION['name'];
-  $question_number = "5";
+  $question_number = count($_SESSION['question_order']);
   $correct_answer = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
   $datetime = new DateTime("now");
   $datetime = $datetime->format('Y-m-d H:i:s');
@@ -41,7 +41,7 @@
         ?>
 			</div>
 			<div class="return">
-				<a href="top.html">TOPに戻る</a>
+				<a href="top.php">TOPに戻る</a>
 			</div>
     </main>
 </body>

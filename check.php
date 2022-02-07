@@ -1,18 +1,8 @@
 <?php
+session_start();
   require('dbconnect.php');
-
-  // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
-  if(!$stmt){
-    die($db->error);
-	}
-  $id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_NUMBER_INT);
-  $stmt->bind_param('i', $id);
-  $stmt->execute(); 
-
-  // 抽出したデータを$rowsに格納
-  $result = $stmt->get_result();
-  $rows = $result->fetch_all(MYSQLI_ASSOC);
+  // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
+  require('tableconnect.php');
 ?>
 
 <!DOCTYPE html>
@@ -74,27 +64,16 @@
     </div>
 
     <!-- 次の問題のidを取得して$next_idに格納 -->
-    <?php 
-      $stmt = $db->prepare('select MIN(id) from questions where id > ?');
-      if(!$stmt){
-        die($db->error);
-      }
-      $stmt->bind_param('i', $id);
-      $result = $stmt->execute();
-      // 問題(レコード)が最後の場合、結果はnullになるので分岐処理
-      if(!$result){
-        die($db->error);
-      }elseif($result != null){
-        $stmt->bind_result($next_id);
-        $stmt->fetch();
-     }
-    ?>
+    <?php $next_id = $_SESSION['question_order'][$question_order+1];?>
 
     <!-- 次の問題(レコード)の有無で表示ボタンを変える -->
     <?php if($next_id): ?>
       <form method="POST" action="quiz.php?id=<?php echo $next_id; ?>">
         <input type="submit" value="次の問題" class="button">
+        <!-- 正解数をquiz.phpに渡す -->
         <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
+        <!-- 次の問題idの配列keyを渡す -->
+        <input type="hidden" name="question_order" value=<?php echo $question_order+1; ?>>
       </form>
     <?php else: ?>
       <form method="POST" action="result.php">

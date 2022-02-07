@@ -1,34 +1,23 @@
 <?php
-    // 1問目の時に名前をセッションに入れて保持
-    session_start();
-    $first_question = filter_input(INPUT_POST, 'first_question', FILTER_SANITIZE_SPECIAL_CHARS);
-    if($first_question){
-      $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-      $_SESSION['name'] = $name;
-    }
+  session_start();
+  // 1問目の時に名前をセッションに入れて保持
+  $first_question = filter_input(INPUT_POST, 'first_question', FILTER_SANITIZE_SPECIAL_CHARS);
+  if($first_question){
+    $result_score = 0;
+    $question_order = 0; 
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+    $_SESSION['name'] = $name;
+   }else{
+    // 2問目以降 check.phpより受け取る
+    // 問題idが入った配列のkey
+    $question_order = filter_input(INPUT_POST, 'question_order', FILTER_SANITIZE_NUMBER_INT);
+    // 正解数
+    $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);  
+  }
 
   require('dbconnect.php');
-  // questionsテーブルとchoicesテーブルを結合
-  $stmt = $db->prepare('select questions.id as q_id, questions.text as q_text, choices.id as c_id, choices.text as c_text, correct_flg, answer_type from questions join choices on questions.id = choices.questions_id where questions.id=?');
-  if(!$stmt){
-    die($db->error);
-	}
-  $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-  $stmt->bind_param('i', $id);
-  $stmt->execute(); 
-
-  // 抽出したデータを$rowsに格納
-  $result = $stmt->get_result();
-  $rows = $result->fetch_all(MYSQLI_ASSOC);
-?>
-
-<!-- 正解数をcheck.phpから受け取る -->
-<?php 
-  if(isset($_POST['result_score'])){
-      $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
-  }else{
-      $result_score = 0;
-  }
+  // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
+  require('tableconnect.php');
 ?>
 
 <!DOCTYPE html>
@@ -62,10 +51,10 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </ul>
-    <!-- 問題のid,正解数をcheck.phpに渡す -->
-    <input type="hidden" name="id" value=<?php echo $rows[0]['q_id']; ?>>
+    <!-- 問題idの配列key,正解数をcheck.phpに渡す -->
+    <input type="hidden" name="question_order" value=<?php echo $question_order; ?>>
     <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
-
+    <?php  ?>
     <input type="submit" id="send" class="button" value="送信">
     <!-- 未選択時に送信を行わずメッセージ表示 -->
     <script>

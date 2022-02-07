@@ -1,12 +1,18 @@
 <?php
+  session_start();
   require('dbconnect.php');
-  $questions = $db->query('select id from questions');
-  if(!$questions){
+  // 問題idをランダムに５問抽出して、配列に格納
+  $stmt = $db->query('SELECT id FROM questions ORDER BY RAND() LIMIT 5');
+  if(!$stmt){
 		die($db->error);
 	}
-/*   $total_question_num = $questions->num_rows;
-  $question_order = range(0, $total_question_num-1);
-  shuffle($question_order);  */
+  $i = 0;
+  while ($result = $stmt->fetch_assoc()) {
+    $_SESSION['question_order'][$i] = $result['id'];
+    $i++;
+  }
+  // １問目の問題id
+  $first_question = $_SESSION['question_order'][0];
 ?>
 
 <!DOCTYPE html>
@@ -24,12 +30,12 @@
   </header>
   <main>
     <div class="start">
-      <form action="quiz.php?id=2" method="POST">
+      <form action="quiz.php?id=<?php echo $first_question ?>" method="POST">
         <label>名前</label>
         <input type="text" name="name" placeholder="name">
         <input type="submit" value="Start">
-        <!-- nameをセッションで保持する場合の処理用 -->
-        <input type="hidden" name="first_question" value="1"> 
+        <!-- セッションでquiz.phpを初めに開いた際のみ処理を行う場合の判別用 -->
+        <input type="hidden" name="first_question" value="first_question"> 
       </form>
     </div>
     <div class="edit">
