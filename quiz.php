@@ -1,12 +1,12 @@
 <?php
   session_start();
-  // 1問目の時に名前をセッションに入れて保持
-  $first_question = filter_input(INPUT_POST, 'first_question', FILTER_SANITIZE_SPECIAL_CHARS);
-  if($first_question){
+  require('dbconnect.php');
+  // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
+  require('tableconnect.php');
+  // １問目と２問目以降で分岐処理
+  if($id == $_SESSION['question_order'][0]){
     $result_score = 0;
     $question_order = 0; 
-    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
-    $_SESSION['name'] = $name;
    }else{
     // 2問目以降 check.phpより受け取る
     // 問題idが入った配列のkey
@@ -14,10 +14,6 @@
     // 正解数
     $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);  
   }
-
-  require('dbconnect.php');
-  // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
-  require('tableconnect.php');
 ?>
 
 <!DOCTYPE html>
@@ -34,6 +30,7 @@
     <h1 class="title">Quiz</h1>
   </header>
   <main>
+  <?php echo $question_order + 1 . "問目"  ?>
   <!-- 問題文 -->
   <div class="question_box">
     <p><?php echo $rows[0]['q_text']; ?></p>

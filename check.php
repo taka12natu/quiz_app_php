@@ -30,6 +30,7 @@
       <h1 class="title">Quiz</h1>
   </header>
   <main>
+    <?php echo $question_order + 1 . "問目"  ?>
     <div class="question_box">
       <p><?php echo $rows[0]['q_text']; ?></p>
     </div>    
