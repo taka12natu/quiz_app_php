@@ -1,8 +1,19 @@
 <?php
-session_start();
+  session_start();
   require('dbconnect.php');
   // questionsテーブルとchoicesテーブルを結合して、抽出したデータを$rowsに格納
-  require('tableconnect.php');
+  $stmt = $db->prepare('SELECT questions.id AS q_id, questions.text AS q_text, choices.id AS c_id, choices.text AS c_text, correct_flg, answer_type FROM questions JOIN choices ON questions.id = choices.questions_id WHERE questions.id=?');
+  if(!$stmt){
+    die($db->error);
+	}
+  $question_order = filter_input(INPUT_POST, 'question_order', FILTER_SANITIZE_NUMBER_INT);
+  $id = $_SESSION['question_order'][$question_order];
+  $stmt->bind_param('i', $id);
+  $stmt->execute(); 
+
+  // 抽出したデータを$rowsに格納
+  $result = $stmt->get_result();
+  $rows = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +52,7 @@ session_start();
         $choice_id = filter_input(INPUT_POST, 'choice', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
         $input_text = filter_input(INPUT_POST, 'input_text', FILTER_SANITIZE_SPECIAL_CHARS);
         $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
-        if($input_text){
+        if($rows[0]['answer_type'] == 'textbox'){
           //　記述形式（テキストボックス）の正誤判定
           if($rows[0]['c_text'] == $input_text){
             echo "<p class='correct'>正解</p>";
