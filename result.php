@@ -25,7 +25,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="./css/style.css">
 	<title>Result</title>
 </head>
 <body>
@@ -36,7 +36,7 @@
 			<h2>Result</h2>
 			<div class="result_text">
 				<?php 
-					echo $correct_answer . "問 正解！"; 
+					echo $question_number . "問中" . $correct_answer . "問正解！"; 
           echo "正答率: " . number_format($correct_answer / $question_number *100, 1);
         ?>
 			</div>

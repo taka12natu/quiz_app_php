@@ -1,3 +1,5 @@
+/* create.php */
+
 // 問題形式を選択した時に実行
 let createForm = document.getElementById('create_form');
 createForm.addEventListener('change', valueChange);

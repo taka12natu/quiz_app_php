@@ -22,7 +22,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="./css/style.css">
   <title>Quiz</title>
 </head>
 <body>
@@ -35,18 +35,21 @@
       <p><?php echo $rows[0]['q_text']; ?></p>
     </div>    
     <form method="POST" class="answer_box">
-      <ul class="choice_box">
-        <?php if($rows[0]['answer_type'] != 'textbox' ): ?>
-          <?php foreach($rows as $row): ?>
-            <li><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?>><?php echo $row['c_text']; ?></li>
-            <!-- 選択肢の表示ついでに正解の選択肢を配列に格納 -->
-            <?php if($row['correct_flg'] == 1){
-                $answer_text[] = $row['c_text'];
-                $answer_id[] = $row['c_id'];
-            } ?>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </ul>
+      <!-- 選択形式（ラジオボタン、チェックボックス） -->
+      <?php if($rows[0]['answer_type'] != 'textbox' ): ?>
+        <?php foreach($rows as $row): ?>
+          <?php if($row['correct_flg'] == 1): ?>
+            <?php // 正解の選択肢を配列に格納
+              $answer_text[] = $row['c_text'];
+              $answer_id[] = $row['c_id']; 
+            ?>
+            <!-- 正解の選択肢は枠線を変えるためにclassを追記 -->
+            <label class="label correct_color"><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?> class="btn_display" ><?php echo $row['c_text']; ?></label>
+          <?php else: ?>
+            <label class="label"><input type="<?php echo $row['answer_type']?>" name="choice" value=<?php echo $row['c_id']; ?> class="btn_display" ><?php echo $row['c_text']; ?></label>
+          <?php endif; ?>
+        <?php endforeach; ?>
+      <?php endif; ?>
     </form>
     <div class="judge_text">
       <?php
@@ -59,19 +62,18 @@
             echo "<p class='correct'>正解</p>";
             $result_score ++;
           }else{
-            echo "正解は「" . htmlspecialchars($rows[0]['c_text']) . "」";
+            echo "不正解！　正解は「" . htmlspecialchars($rows[0]['c_text']) . "」";
           }
         // 選択形式（ラジオボタン、チェックボックス）の正誤判定
         }elseif($choice_id == $answer_id){
           echo "<p class='correct'>正解</p>";
           $result_score ++;
         }else{
-          echo "正解は";
+          echo "不正解！　正解は";
           foreach ($answer_text as $text){
             echo "「" . htmlspecialchars($text) . "」";
           } 
         }
-        
       ?>
     </div>
 
@@ -89,7 +91,7 @@
       </form>
     <?php else: ?>
       <form method="POST" action="result.php">
-        <input type="submit" value="結果" class="button">
+        <input type="submit" value="結果" class="button result_btn">
         <input type="hidden" name="result_score" value=<?php echo $result_score; ?>>
       </form>
     <?php endif ?>
