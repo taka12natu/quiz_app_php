@@ -19,7 +19,7 @@
   if(!$stmt){
     die($db->error);
   } 
-  $c_texts = filter_input(INPUT_POST, 'c_texts', FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+  $c_texts = filter_input(INPUT_POST, 'c_texts', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
   // 正解に選択した問題の番号(1~)が格納される
   $correct_flg_order = filter_input(INPUT_POST, 'check', FILTER_SANITIZE_NUMBER_INT, FILTER_REQUIRE_ARRAY);
   $answer_type = filter_input(INPUT_POST, 'form_select', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -51,5 +51,22 @@
   }
 ?>
 
-<p>登録しました</p>
-<div><a href="detail.php?id=<?php echo $q_id ?>">戻る</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/style.css">
+  <title>Document</title>
+</head>
+<body>
+  <header>
+    <h1 class="title">Quiz</h1>
+  </header>
+  <main>
+    <p>登録しました</p>
+    <a href="detail.php?id=<?php echo $q_id ?>" class="back margin_top20">戻る</a>
+  </main>
+</body>
+</html>

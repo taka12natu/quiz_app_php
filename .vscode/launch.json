@@ -49,6 +49,12 @@
       "name": "http://localhost:8888/quiz_app/quiz.php?id=76",
       "request": "launch",
       "url": "http://localhost:8888/quiz_app/quiz.php?id=76"
+    },
+    {
+      "type": "pwa-chrome",
+      "name": "http://localhost:8888/quiz_app/question_list.php",
+      "request": "launch",
+      "url": "http://localhost:8888/quiz_app/question_list.php"
     }
   ]
 }

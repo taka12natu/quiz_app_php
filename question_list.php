@@ -30,7 +30,7 @@
             <p class="table_text"><a href="detail.php?id=<?php echo $question['id']; ?>"><?php echo htmlspecialchars($question['text']);?></a></p>
           </td>
           <td class="td_edit"><a href="detail.php?id=<?php echo $question['id']; ?>">編集</a></td>
-          <td class="td_delete"><a href="delete.php?id=<?php echo $question['id']; ?>">削除</td>
+          <td class="td_delete"><a href="delete.php?id=<?php echo $question['id']; ?>" id="delete_btn" onclick="return confirm('削除しますか？')">削除</td>
         </tr>
       <?php endwhile; ?>
     </table>      

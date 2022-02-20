@@ -16,7 +16,7 @@ header {
 }
 
 main {
-  padding: 70px 0 100px 0;
+  padding: 70px 0 50px 0;
   width: 70%;
   margin: 0 auto;
   text-align: center;
@@ -99,6 +99,10 @@ button, label, .button {
   font-size: 18px;
 }
 
+.text_left {
+  text-align: left;
+}
+
 /* top.php */
 .header_title {
   padding-left: 30px;
@@ -132,6 +136,12 @@ button, label, .button {
   margin-left: 20px;
 }
 
+.answer_record {
+  display: block;
+  text-align: center;
+  margin-top: 30px;
+}
+
 /* quiz.php */
 .question_box {
   font-size: 20px;
@@ -152,6 +162,7 @@ button, label, .button {
   border-radius: 5px;
   margin-left: 10px;
   width: 40%;
+  overflow-wrap: break-word;
 }
 
 .answer_box .label:hover {
@@ -164,7 +175,7 @@ input.btn_display {
 }
 
 .input_textbox {
-  width: 15em;
+  width: 80%;
   margin: 30px 0;
   padding: 0.5em;
   border: 1px solid #999;
@@ -285,7 +296,7 @@ li {
   border: 2px solid #b3adad;
 }
 
-.edit_box .choice_btn, .create_box .choice_btn {
+.edit_box .choice_select, .create_box .choice_select {
   margin: 10px;
   transform: scale(1.5);
 }
@@ -333,11 +344,25 @@ th {
   margin-left: 5%;
 }
 
-.table_border th, .table_border td {
+.table_border th {
   border-bottom: solid 1px;
 }
 
 .table_border tr:nth-child(odd) {
-  background-color: #dee8f3;
+  background-color: #ebecee;
+}
+
+.error_text {
+  color: red;
+  font-size: 14px;
+}
+
+.error_display {
+  background-color: #f0b7b7;
+  border: 1px solid red;
+}
+
+.margin_top20 {
+  margin-top: 20px;
 }
 /*# sourceMappingURL=style.css.map */

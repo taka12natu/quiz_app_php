@@ -17,6 +17,7 @@
       <h1 class="title">Quiz</h1>
     </header>
     <main>
+      <h2>回答履歴</h2>
       <table class="table_border">
         <tr>
           <th>no.</th>
@@ -37,6 +38,9 @@
           </tr>
         <?php endwhile; ?>
       </table>
+      <div class="btn_box">
+        <a href="./top.php">戻る</a>
+      </div>
     </main>
   </body>
 </html>

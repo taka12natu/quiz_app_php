@@ -59,7 +59,7 @@
       <?php endif; ?>
       <div class="btn_box">
           <a href="edit.php?id=<?php echo $id ?>">編集</a>
-          <a href="delete.php?id=<?php echo $id ?>" class="delete_btn">削除</a>
+          <a href="delete.php?id=<?php echo $id ?>" class="delete_btn" onclick="return confirm('削除しますか？')">削除</a>
       </div>
         <a href="question_list.php" class="back">戻る</a>
     </div>
