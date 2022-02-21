@@ -365,4 +365,9 @@ th {
 .margin_top20 {
   margin-top: 20px;
 }
+
+.pagenation {
+  margin: 20px 0;
+  font-size: 18px;
+}
 /*# sourceMappingURL=style.css.map */

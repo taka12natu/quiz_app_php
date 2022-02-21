@@ -37,8 +37,8 @@ function confirmValue(){
           let errTag = errorText('※入力してください');
           editForm.insertBefore(errTag,editButton);
           return false;
-        }else if(choiceBox[i].value.length > 20){
-          let errTag = errorText('※20字以内で入力してください');
+        }else if(choiceBox[i].value.length > 30){
+          let errTag = errorText('※30字以内で入力してください');
           editForm.insertBefore(errTag,editButton);         
         }
         if(choiceSelect[i].checked == true){
@@ -51,8 +51,8 @@ function confirmValue(){
         editForm.insertBefore(errTag,editButton);
         textboxText.classList.add("error_display");
         return false;     
-      }else if(textboxText.value.length > 20){
-        let errTag = errorText('※20字以内で入力してください');
+      }else if(textboxText.value.length > 30){
+        let errTag = errorText('※30字以内で入力してください');
         editForm.insertBefore(errTag,editButton);
         textboxText.classList.add("error_display");
         return false;     

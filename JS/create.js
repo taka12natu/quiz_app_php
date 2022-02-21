@@ -102,8 +102,8 @@ function confirmValue(){
             let errTag = errorText('※入力してください');
             createForm.insertBefore(errTag,createButton);
             return false;
-          }else if(radioText[i].value.length > 20){
-            let errTag = errorText('※20字以内で入力してください');
+          }else if(radioText[i].value.length > 30){
+            let errTag = errorText('※30字以内で入力してください');
             createForm.insertBefore(errTag,createButton);
             return false;
           }
@@ -134,8 +134,8 @@ function confirmValue(){
           createForm.insertBefore(errTag,createButton);
           textboxText.classList.add("error_display");
           return false;     
-        }else if(textboxText.value.length > 20){
-          let errTag = errorText('※20字以内で入力してください');
+        }else if(textboxText.value.length > 30){
+          let errTag = errorText('※30字以内で入力してください');
           createForm.insertBefore(errTag,createButton);
           textboxText.classList.add("error_display");
           return false;     

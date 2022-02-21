@@ -191,20 +191,20 @@ input.btn_display {
   width: 90%;
   margin-left: 5%;
   table-layout: auto;
-}
-.table_row{
-  display: flex;
-  width: 100%;
-  margin: 15px 0;
-  border-bottom: 1px solid black;
-}
-.table_data{
-  width: 80%;
-}
-.table_text{
-  text-align: left;
-  & a{
-    text-decoration: none;
+  &_row{
+    display: flex;
+    width: 100%;
+    margin: 15px 0;
+    border-bottom: 1px solid black;
+  }
+  &_data{
+    width: 80%;
+  }
+  &_text{
+    text-align: left;
+    & a{
+      text-decoration: none;
+    }
   }
 }
 .td_edit, .td_delete{
@@ -300,4 +300,8 @@ th{
 }
 .margin_top20{
   margin-top: 20px;
+}
+.pagenation{
+  margin: 20px 0;
+  font-size: 18px;
 }

@@ -3,11 +3,19 @@
 ## 使用言語
 - HTML
 - CSS
+- JS
 - PHP
 - MySQL
 
 ## テーブル
-![quiz_app_ER](https://user-images.githubusercontent.com/68176951/151350766-0f7ca097-61a3-4b71-99db-cc6bb4668b50.png)
+![quiz_app drawio](https://user-images.githubusercontent.com/68176951/154842226-649e07c3-7117-4850-8d32-4618b803e134.png)
 
-## 動作
-![quiz_app](https://user-images.githubusercontent.com/68176951/151350806-48a20c94-7189-4ad8-96e8-9674e3288023.gif)
+## 実装機能
+- クイズ結果記録
+- クイズ作成、編集、削除
+- ランダム出題
+- 問題形式選択（選択問題（ラジオボタン）、複数選択問題（チェックボックス）、記述問題（テキストボックス））
+- バリデーション
+
+## 未実装
+- レスポンシブ
