@@ -58,7 +58,7 @@
         $result_score = filter_input(INPUT_POST, 'result_score', FILTER_SANITIZE_NUMBER_INT);
         if($rows[0]['answer_type'] == 'textbox'){
           //　記述形式（テキストボックス）の正誤判定
-          if($rows[0]['c_text'] == $input_text){
+          if(strtolower($rows[0]['c_text']) == strtolower($input_text)){
             echo "<p class='correct'>正解</p>";
             $result_score ++;
           }else{
